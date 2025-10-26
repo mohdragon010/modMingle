@@ -1,0 +1,18 @@
+.nav ul li {
+  position: relative; /* necessary for positioning the ::after */
+}
+
+.nav ul li::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.2s ease-in-out;
+}
+
+.nav ul li:hover::after {
+  width: 100%;
+}
