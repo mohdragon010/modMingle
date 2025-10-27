@@ -17,11 +17,11 @@ export default function Navbar() {
         <li><Link href="/">Home</Link></li>
         <li><Link href="/popular">Popular</Link></li>
         <li><Link href="/about">About</Link></li>
-        <li>
+        <div>
           <IconButton onClick={colorMode.toggleColorMode} color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
-        </li>
+        </div>
       </ul>
     </nav>
   );
