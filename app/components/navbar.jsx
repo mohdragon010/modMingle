@@ -10,7 +10,7 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText,
+  
   useMediaQuery,
 } from '@mui/material';
 import { Brightness4, Brightness7, Menu as MenuIcon } from '@mui/icons-material';
@@ -31,6 +31,9 @@ export default function Navbar() {
     <>
       <Link href="/" passHref>
         <Button color="inherit">Home</Button>
+      </Link>
+      <Link href="mods" passHref>
+        <Button color="inherit">Mods</Button>
       </Link>
       <Link href="/popular" passHref>
         <Button color="inherit">Popular</Button>

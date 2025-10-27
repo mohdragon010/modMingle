@@ -1,5 +1,6 @@
 "use client"
 import { Card, Typography } from "@mui/material"
+import Image from "next/image";
 
 export default function ModCard({ title, description, icon, author, downloads }) {
   return (
@@ -8,9 +9,12 @@ export default function ModCard({ title, description, icon, author, downloads })
     >
       <div className="flex flex-col items-center p-4 h-full">
         {icon && (
-          <img
+          <Image
+            loader={() => icon}
             src={icon}
             alt={`${title} icon`}
+            width={96}
+            height={96}
             className="w-24 h-24 rounded-lg mb-4"
           />
         )}
