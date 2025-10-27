@@ -1,28 +1,87 @@
-'use client'
-import Link from "next/link";
-import { IconButton } from "@mui/material";
-import { Brightness4, Brightness7 } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles";
-import { useColorMode } from "../ThemeProvider"; // تأكد من المسار
-import "@/styles/navbar.css";
+'use client';
+import Link from 'next/link';
+import { useState } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+} from '@mui/material';
+import { Brightness4, Brightness7, Menu as MenuIcon } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
+import { useColorMode } from '../ThemeProvider';
 
 export default function Navbar() {
   const theme = useTheme();
   const colorMode = useColorMode();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const navLinks = (
+    <>
+      <Link href="/" passHref>
+        <Button color="inherit">Home</Button>
+      </Link>
+      <Link href="/popular" passHref>
+        <Button color="inherit">Popular</Button>
+      </Link>
+      <Link href="/about" passHref>
+        <Button color="inherit">About</Button>
+      </Link>
+    </>
+  );
 
   return (
-    <nav className="nav flex flex-row justify-between p-4 pr-10 items-center">
-      <Link href="/"><h1 className="text-3xl font-bold">ModMingle</h1></Link>
-      <ul className="flex flex-row gap-5 items-center">
-        <li><Link href="/">Home</Link></li>
-        <li><Link href="/popular">Popular</Link></li>
-        <li><Link href="/about">About</Link></li>
-        <div>
-          <IconButton onClick={colorMode.toggleColorMode} color="inherit">
-            {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-          </IconButton>
-        </div>
-      </ul>
-    </nav>
+    <AppBar
+      position="sticky"
+      sx={{
+        backdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      }}
+    >
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Link href="/" passHref>
+            <span style={{ cursor: 'pointer', fontWeight: 'bold' }}>ModMingle</span>
+          </Link>
+        </Typography>
+
+        {isMobile ? (
+          <>
+            <IconButton color="inherit" onClick={handleDrawerToggle}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
+              <List sx={{ width: 250 }}>
+                {navLinks}
+                <ListItem>
+                  <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+                    {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+                  </IconButton>
+                </ListItem>
+              </List>
+            </Drawer>
+          </>
+        ) : (
+          <>
+            {navLinks}
+            <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+              {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
+          </>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }

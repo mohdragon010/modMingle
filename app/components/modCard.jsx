@@ -4,19 +4,19 @@ import { Card, Typography } from "@mui/material"
 export default function ModCard({ title, description, icon, author, downloads }) {
   return (
     <Card
-      className="bg-transparent text-foreground rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700 w-full"
+      className="bg-transparent text-foreground rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700 w-full h-full flex flex-col"
     >
-      <div className="flex flex-col sm:flex-row items-center p-4">
+      <div className="flex flex-col items-center p-4 h-full">
         {icon && (
           <img
             src={icon}
             alt={`${title} icon`}
-            className="w-24 h-24 rounded-lg sm:mr-4 mb-4 sm:mb-0"
+            className="w-24 h-24 rounded-lg mb-4"
           />
         )}
-        <div className="grow text-center sm:text-left">
-          <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-            <div className="mb-2 sm:mb-0">
+        <div className="text-center flex flex-col grow">
+          <div className="flex flex-col justify-center items-center">
+            <div className="mb-2">
               <Typography gutterBottom variant="h6" component="div" className="font-bold">
                 {title}
               </Typography>
@@ -41,9 +41,11 @@ export default function ModCard({ title, description, icon, author, downloads })
               </Typography>
             </div>
           </div>
-          <Typography variant="body2" color="text.secondary" className="mt-2">
-            {description}
-          </Typography>
+          <div className="grow h-20">
+            <Typography variant="body2" color="text.secondary" className="mt-2">
+              {description}
+            </Typography>
+          </div>
         </div>
       </div>
     </Card>

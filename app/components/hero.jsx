@@ -7,72 +7,128 @@ export default function Hero() {
   return (
     <Box
       component={motion.section}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: 'easeInOut' }}
       sx={{
-        minHeight: '70vh',
+        minHeight: '80vh',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-        px: 3,
-        py: { xs: 8, md: 12 },
+        position: 'relative',
+        overflow: 'hidden',
+        bgcolor: '#111',
+        color: '#fff',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(45deg, #00bcd4, #3f51b5, #f50057, #ffc107)',
+          backgroundSize: '400% 400%',
+          animation: 'gradientAnimation 15s ease infinite',
+          filter: 'blur(20px)',
+          zIndex: 1,
+        },
+        '@keyframes gradientAnimation': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
       }}
     >
-      <Typography
-        component={motion.h1}
-        variant="h2"
-        fontWeight="bold"
-        mb={2}
+      <Box
         sx={{
-          fontSize: { xs: '2rem', md: '3.5rem' },
-          background: 'linear-gradient(90deg, #00bcd4, #3f51b5)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          position: 'relative',
+          zIndex: 2,
+          p: 4,
+          borderRadius: '12px',
+          bgcolor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
         }}
       >
-        Discover and Share Minecraft Mods
-      </Typography>
+        <Typography
+          component={motion.h1}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          variant="h2"
+          fontWeight="bold"
+          mb={2}
+          sx={{
+            fontSize: { xs: '2.5rem', md: '4rem' },
+            letterSpacing: '1px',
+          }}
+        >
+          Your Ultimate Modding Hub
+        </Typography>
 
-      <Typography
-        variant="h6"
-        color="text.secondary"
-        mb={4}
-        sx={{ maxWidth: 600 }}
-      >
-        Explore a world of creativity — browse, search, and favorite the best Minecraft mods from the community.
-      </Typography>
+        <Typography
+          component={motion.p}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          variant="h6"
+          color="text.secondary"
+          mb={4}
+          sx={{ maxWidth: 650, color: '#ccc' }}
+        >
+          Dive into a universe of mods. Discover, share, and elevate your Minecraft experience with the largest mod library.
+        </Typography>
 
-      <Stack direction="row" spacing={2}>
-        <Link href="/popular" passHref>
-          <Button
-            variant="contained"
-            size="large"
-            component={motion.button}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Explore Mods
-          </Button>
-        </Link>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+          <Link href="/popular" passHref>
+            <Button
+              variant="contained"
+              size="large"
+              component={motion.button}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              sx={{
+                background: 'linear-gradient(45deg, #00bcd4, #3f51b5)',
+                color: '#fff',
+                borderRadius: '50px',
+                px: 4,
+                animation: 'pulse 2s infinite',
+              }}
+            >
+              Explore Mods
+            </Button>
+          </Link>
 
-        <Link href="/about" passHref>
-          <Button
-            variant="outlined"
-            size="large"
-            color="primary"
-            component={motion.button}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Learn More
-          </Button>
-        </Link>
-      </Stack>
+          <Link href="/about" passHref>
+            <Button
+              variant="outlined"
+              size="large"
+              color="primary"
+              component={motion.button}
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(0, 188, 212, 0.1)' }}
+              whileTap={{ scale: 0.95 }}
+              sx={{ borderRadius: '50px', px: 4, borderColor: '#00bcd4', color: '#00bcd4' }}
+            >
+              About us
+            </Button>
+          </Link>
+        </Stack>
+      </Box>
+
+      <style jsx global>{`
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.4);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(0, 188, 212, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(0, 188, 212, 0);
+          }
+        }
+      `}</style>
     </Box>
   );
 }

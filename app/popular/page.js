@@ -2,9 +2,9 @@ import ModCard from "../components/ModCard";
 
 async function getPopularMods() {
   const res = await fetch(
-    "https://api.modrinth.com/v2/search?query=&limit=21&index=downloads",
+    "https://api.modrinth.com/v2/search?query=&limit=51&index=downloads",
     {
-      next: { revalidate: 0 },
+      next: { revalidate: 120 },
     }
   );
 
@@ -50,7 +50,7 @@ export default async function Popular() {
         <h1 className="text-4xl font-extrabold text-center mb-10 tracking-tight">
           Most Popular Mods
         </h1>
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => (
             <ModCard
               key={project.project_id}
