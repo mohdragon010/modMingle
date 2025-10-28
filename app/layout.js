@@ -1,7 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar";
-import ThemeProvider from "./ThemeProvider"; // تأكد من المسار الصح
+import Footer from "./components/Footer";
+import BackToTop from "./components/BackToTop";
+import ThemeProvider from "./ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +16,44 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ModMingle",
-  description: "",
+  title: "ModMingle - Your Ultimate Minecraft Mod Discovery Hub",
+  description: "Discover, explore, and download thousands of Minecraft mods. Find the perfect mods for your gameplay with ModMingle's comprehensive mod library powered by Modrinth.",
+  keywords: "minecraft, mods, modding, mod discovery, modrinth, gaming",
+  authors: [{ name: "Mohamed Ayman" }],
+  creator: "Mohamed Ayman",
+  openGraph: {
+    title: "ModMingle - Minecraft Mod Discovery",
+    description: "Your ultimate hub for discovering and downloading Minecraft mods",
+    url: "https://mod-mingle.vercel.app",
+    siteName: "ModMingle",
+    images: [
+      {
+        url: "https://modmingle.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "ModMingle - Minecraft Mod Discovery",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ModMingle - Minecraft Mod Discovery",
+    description: "Discover and download thousands of Minecraft mods",
+    images: ["https://modmingle.com/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({ children }) {
@@ -27,6 +65,8 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <Navbar />
           {children}
+          <Footer />
+          <BackToTop />
         </ThemeProvider>
       </body>
     </html>

@@ -2,15 +2,18 @@
 import { useState, useEffect } from 'react';
 import {
   Container,
-
   Pagination,
-  CircularProgress,
   Alert,
   TextField,
   Box,
   Typography,
+  Grid,
+  InputAdornment,
 } from '@mui/material';
+import { motion } from 'framer-motion';
+import { Search as SearchIcon } from '@mui/icons-material';
 import ModCard from '../components/modCard';
+import { ModCardGridSkeleton } from '../components/SkeletonLoader';
 
 export default function Mods() {
   const [projects, setProjects] = useState([]);
@@ -21,6 +24,7 @@ export default function Mods() {
   const [searchQuery, setSearchQuery] = useState('');
   const modsPerPage = 27;
 
+  // Fetch mods from Modrinth API
   useEffect(() => {
     async function fetchMods() {
       setLoading(true);
@@ -34,8 +38,8 @@ export default function Mods() {
         setProjects(data.hits || []);
         setTotalPages(Math.ceil(data.total_hits / modsPerPage));
       } catch (e) {
-        setError('Failed to fetch mods. Please try again later.');
         console.error(e);
+        setError('Failed to fetch mods. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -44,76 +48,135 @@ export default function Mods() {
     fetchMods();
   }, [currentPage, searchQuery]);
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
+  // Pagination handler
+  const handlePageChange = (event, value) => setCurrentPage(value);
 
+  // Search handler
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
 
-  return (
-    <Container sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h3" component="h1" fontWeight="bold" gutterBottom>
-          Discover Mods
-        </Typography>
-        <TextField
-          label="Search Mods"
-          variant="outlined"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          sx={{ width: '100%', maxWidth: 500, mx: 'auto' }}
-        />
-      </Box>
-      {loading ? null : <Mypag totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange}/>}
+  // Framer Motion animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05, delayChildren: 0.1 },
+    },
+  };
 
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-          <CircularProgress />
-        </Box>
-      ) : error ? (
-        <Alert severity="error" sx={{ my: 4 }}>
-          {error}
-        </Alert>
-      ) : projects.length === 0 ? (
-        <Typography variant="h6" align="center" sx={{ my: 4 }}>
-          No mods found. Try adjusting your search query.
-        </Typography>
-      ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {projects.map((project) => (
-                project.project_type !== "mod" ? null : 
-                <ModCard
-                  key={project.project_id}
-                  title={project.title}
-                  description={
-                    project.description?.length > 150
-                      ? project.description.slice(0, 150) + "..."
-                      : project.description || "No description available."
-                  }
-                  author={project.author}
-                  downloads={project.downloads.toLocaleString()}
-                  icon={project.icon_url}
-                />
-              ))}
-            </div>
-        )}
-        {loading ? null : <Mypag totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange}/>}
-    </Container>
-  );
-}
-function Mypag({totalPages,currentPage,handlePageChange}){
-    return(
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }} className={"mb-2"}>
-            <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-            size="large"
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  return (
+    <Box sx={{ py: 8 }}>
+      <Container maxWidth="lg">
+        {/* Header and search bar */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Box sx={{ mb: 6, textAlign: 'center' }}>
+            <Typography
+              variant="h3"
+              component="h1"
+              fontWeight="bold"
+              gutterBottom
+              sx={{
+                background: 'linear-gradient(45deg, #00bcd4, #3f51b5)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                mb: 2,
+              }}
+            >
+              🔍 Discover Mods
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+              Search through thousands of mods and find exactly what you need
+            </Typography>
+
+            {/* Search field */}
+            <TextField
+              label="Search Mods"
+              variant="outlined"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+                sx: { borderRadius: 3 },
+              }}
             />
-      </Box>
-    )
+          </Box>
+        </motion.div>
+
+        {/* Loading, Error, Empty, or Grid */}
+        {loading ? (
+          <ModCardGridSkeleton count={27} />
+        ) : error ? (
+          <Alert severity="error" sx={{ my: 4 }}>
+            {error}
+          </Alert>
+        ) : projects.length === 0 ? (
+          <Typography variant="h6" align="center" sx={{ my: 4 }}>
+            No mods found. Try adjusting your search query.
+          </Typography>
+        ) : (
+          <motion.div variants={containerVariants} initial="hidden" animate="visible">
+            <Grid container spacing={2} alignItems="stretch">
+              {projects.map((project) =>
+                project.project_type !== 'mod' ? null : (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    key={project.project_id}
+                    sx={{ display: 'flex' }}
+                  >
+                    <motion.div variants={itemVariants} style={{ flexGrow: 1, width: '100%' }}>
+                      <ModCard
+                        title={project.title}
+                        description={
+                          project.description?.length > 150
+                            ? project.description.slice(0, 150) + '...'
+                            : project.description || 'No description available.'
+                        }
+                        author={project.author}
+                        downloads={project.downloads.toLocaleString()}
+                        icon={project.icon_url}
+                        slug={project.slug}
+                      />
+                    </motion.div>
+                  </Grid>
+                )
+              )}
+            </Grid>
+          </motion.div>
+        )}
+
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+            />
+          </Box>
+        )}
+      </Container>
+    </Box>
+  );
 }

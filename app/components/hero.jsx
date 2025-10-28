@@ -11,7 +11,7 @@ export default function Hero() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1, ease: 'easeInOut' }}
       sx={{
-        minHeight: '80vh',
+        minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -82,36 +82,57 @@ export default function Hero() {
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
           <Link href="/popular" passHref>
-            <Button
-              variant="contained"
-              size="large"
-              component={motion.button}
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              sx={{
-                background: 'linear-gradient(45deg, #00bcd4, #3f51b5)',
-                color: '#fff',
-                borderRadius: '50px',
-                px: 4,
-                animation: 'pulse 2s infinite',
-              }}
             >
-              Explore Mods
-            </Button>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  background: 'linear-gradient(45deg, #00bcd4, #3f51b5)',
+                  color: '#fff',
+                  borderRadius: '50px',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  animation: 'pulse 2s infinite',
+                  boxShadow: '0 8px 24px rgba(0, 188, 212, 0.3)',
+                }}
+              >
+                Explore Mods
+              </Button>
+            </motion.div>
           </Link>
 
           <Link href="/about" passHref>
-            <Button
-              variant="outlined"
-              size="large"
-              color="primary"
-              component={motion.button}
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(0, 188, 212, 0.1)' }}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              sx={{ borderRadius: '50px', px: 4, borderColor: '#00bcd4', color: '#00bcd4' }}
             >
-              About us
-            </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                sx={{
+                  borderRadius: '50px',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  borderColor: '#00bcd4',
+                  color: '#00bcd4',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 188, 212, 0.1)',
+                    borderColor: '#00bcd4',
+                  },
+                }}
+              >
+                About Us
+              </Button>
+            </motion.div>
           </Link>
         </Stack>
       </Box>
