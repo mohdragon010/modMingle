@@ -19,7 +19,7 @@ export default function Footer() {
   const socialLinks = [
     { icon: <GitHub />, href: 'https://github.com/mohdragon010', label: 'GitHub', color: '#333' },
     { icon: <WhatsApp />, href: 'https://wa.me/+201027118875', label: 'WhatsApp', color: '#25D366' },
-    { icon: <Mail />, href: 'mohammed.ayman152433@gmail.com', label: 'Email', color: '#EA4335' },
+    { icon: <Mail />, href: 'email:mohammed.ayman152433@gmail.com', label: 'Email', color: '#EA4335' },
   ];
 
   const footerSections = [
@@ -38,7 +38,6 @@ export default function Footer() {
         { label: 'About Us', href: '/about' },
         { label: 'API Docs', href: 'https://docs.modrinth.com' },
         { label: 'Guidelines', href: '/about' },
-        { label: 'FAQ', href: '/about' },
       ]
     },
   ];
