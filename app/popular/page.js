@@ -1,6 +1,7 @@
 'use client';
-import { Container, Typography, Grid, Box, Alert, useTheme } from '@mui/material';
+import { Container, Typography, Box, Alert, Chip } from '@mui/material';
 import { motion } from 'framer-motion';
+import { Whatshot as FireIcon } from '@mui/icons-material';
 import ModCard from "../components/modCard";
 import { ModCardSkeleton } from "../components/SkeletonLoader";
 import { useEffect, useState } from 'react';
@@ -9,13 +10,13 @@ export default function Popular() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const theme = useTheme(); // For theme-aware background
+  const [stats, setStats] = useState({ totalDownloads: 0, modCount: 0 });
 
   useEffect(() => {
     async function fetchPopularMods() {
       try {
         const res = await fetch(
-          "https://api.modrinth.com/v2/search?query=&limit=51&index=downloads"
+          'https://api.modrinth.com/v2/search?query=&limit=51&index=downloads&facets=[["project_type:mod"]]'
         );
 
         if (!res.ok) {
@@ -23,8 +24,16 @@ export default function Popular() {
         }
 
         const data = await res.json();
-        console.log("Fetched projects:", data.hits); // Debug
-        setProjects(data.hits || []);
+        const modProjects = data.hits.filter(p => p.project_type === 'mod');
+        
+        // Calculate stats
+        const totalDownloads = modProjects.reduce((sum, mod) => sum + mod.downloads, 0);
+        
+        setProjects(modProjects);
+        setStats({
+          totalDownloads,
+          modCount: modProjects.length
+        });
       } catch (e) {
         setError(e.message);
       } finally {
@@ -36,103 +45,154 @@ export default function Popular() {
   }, []);
 
   const containerVariants = {
-    hidden: {},
+    hidden: { opacity: 0 },
     visible: {
-      transition: { staggerChildren: 0.05 },
+      opacity: 1,
+      transition: { staggerChildren: 0.05, delayChildren: 0.1 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   if (error) {
     return (
-      <Container sx={{ py: 8 }}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      </Container>
+      <Box sx={{ py: 8 }}>
+        <Container>
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        </Container>
+      </Box>
     );
   }
 
   return (
-    <Box sx={{ py: 8, backgroundColor: theme.palette.background.default }}>
+    <Box sx={{ py: 8 }}>
       <Container maxWidth="lg">
         {/* Title Section */}
         <Box
           component={motion.div}
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          sx={{ textAlign: 'center', mb: 8 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          sx={{ textAlign: 'center', mb: 6 }}
         >
-          <Typography
-            variant="h3"
-            component="h1"
-            fontWeight="bold"
-            gutterBottom
-            sx={{
-              background: 'linear-gradient(45deg, #00bcd4, #3f51b5)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              mb: 2,
-            }}
-          >
-            🔥 Most Popular Mods
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 2 }}>
+            <FireIcon sx={{ fontSize: 40, color: '#ff6b35' }} />
+            <Typography
+              variant="h3"
+              component="h1"
+              fontWeight="bold"
+              sx={{
+                background: 'linear-gradient(45deg, #ff6b35, #f7931e)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Most Popular Mods
+            </Typography>
+          </Box>
+          
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ maxWidth: 600, mx: 'auto' }}
+            sx={{ maxWidth: 600, mx: 'auto', mb: 3 }}
           >
             Discover the most downloaded and loved mods in the Minecraft community
           </Typography>
+
+          {/* Stats Chips */}
+          {!loading && (
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Chip
+                label={`${stats.modCount} Top Mods`}
+                color="primary"
+                sx={{ fontWeight: 'bold' }}
+              />
+              <Chip
+                label={`${stats.totalDownloads.toLocaleString()} Total Downloads`}
+                variant="outlined"
+                color="primary"
+                sx={{ fontWeight: 'bold' }}
+              />
+            </Box>
+          )}
         </Box>
 
-        {/* Mods Grid */}
-        <Box
-          component={motion.div}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <Grid container spacing={3}>
-            {loading
-              ? Array.from({ length: 9 }).map((_, i) => (
-                  <Grid item xs={12} sm={6} md={4} key={i}>
-                    <Box sx={{ width: '100%' }}>
-                      <ModCardSkeleton />
-                    </Box>
-                  </Grid>
-                ))
-              : projects.map((project) => (
-                  <Grid item xs={12} sm={6} md={4} key={project.project_id} sx={{ height: '100%' }}>
-                    <motion.div
-                      variants={itemVariants}
-                      style={{ height: '100%', display: 'flex' }}
+        {/* Mods List */}
+        {loading ? (
+          <Box sx={{ width: '100%', maxWidth: 1200, mx: 'auto' }}>
+            {Array.from({ length: 9 }).map((_, i) => (
+              <Box key={i} sx={{ mb: 2 }}>
+                <ModCardSkeleton />
+              </Box>
+            ))}
+          </Box>
+        ) : projects.length === 0 ? (
+          <Alert severity="info" sx={{ maxWidth: 600, mx: 'auto' }}>
+            No mods found at this time.
+          </Alert>
+        ) : (
+          <Box
+            component={motion.div}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            sx={{ width: '100%', maxWidth: 1200, mx: 'auto' }}
+          >
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.project_id}
+                variants={itemVariants}
+                style={{ marginBottom: '16px' }}
+              >
+                <Box sx={{ position: 'relative' }}>
+                  {/* Top 3 Badge */}
+                  {index < 3 && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: -8,
+                        left: -8,
+                        zIndex: 10,
+                        bgcolor: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32',
+                        color: '#000',
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 'bold',
+                        fontSize: '0.9rem',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                      }}
                     >
-                      <ModCard
-                        title={project.title}
-                        description={
-                          project.description?.length > 150
-                            ? project.description.slice(0, 150) + "..."
-                            : project.description || "No description available."
-                        }
-                        author={
-                          project.authors?.map(a => a.username).join(", ") || "Unknown"
-                        }
-                        downloads={project.downloads?.toLocaleString() || "0"}
-                        icon={project.icon_url || "/default-icon.png"}
-                        slug={project.slug}
-                      />
-                    </motion.div>
-                  </Grid>
-                ))}
-          </Grid>
-        </Box>
+                      #{index + 1}
+                    </Box>
+                  )}
+                  
+                  <ModCard
+                    title={project.title}
+                    description={
+                      project.description?.length > 150
+                        ? project.description.slice(0, 150) + '...'
+                        : project.description || 'No description available.'
+                    }
+                    author={project.author}
+                    downloads={project.downloads.toLocaleString()}
+                    icon={project.icon_url}
+                    slug={project.slug}
+                  />
+                </Box>
+              </motion.div>
+            ))}
+          </Box>
+        )}
       </Container>
     </Box>
   );

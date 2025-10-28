@@ -1,122 +1,300 @@
-"use client";
-import { Card, Typography, Box } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
+'use client';
+import { Card, Typography, Box, Chip } from '@mui/material';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Download as DownloadIcon, Person, TrendingUp } from '@mui/icons-material';
 
 export default function ModCard({ title, description, icon, author, downloads, slug }) {
+  // Determine if it's a trending mod (high downloads)
+  const downloadCount = parseInt(downloads.replace(/,/g, ''));
+  const isTrending = downloadCount > 1000000;
+  const isPopular = downloadCount > 500000;
+
   return (
     <Link
       href={`/mod/${slug}`}
-      style={{ textDecoration: "none" }}
+      style={{
+        textDecoration: 'none',
+        width: '100%',
+        display: 'block'
+      }}
     >
       <Card
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          height: "100%",
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 2,
-          cursor: "pointer",
-          overflow: "hidden",
-          transition: "all 0.3s ease",
-          width:"300px",
-          "&:hover": {
-            borderColor: "primary.main",
-            boxShadow: "0 8px 24px rgba(0, 188, 212, 0.3)",
-            transform: "translateY(-6px)",
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2.5,
+          p: 2.5,
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 3,
+          cursor: 'pointer',
+          overflow: 'hidden',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          height: '150px',
+          position: 'relative',
+          bgcolor: 'background.paper',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: 'linear-gradient(90deg, #00bcd4, #3f51b5)',
+            transform: 'scaleX(0)',
+            transformOrigin: 'left',
+            transition: 'transform 0.4s ease',
+          },
+          '&:hover': {
+            borderColor: 'primary.main',
+            boxShadow: '0 12px 32px rgba(0, 188, 212, 0.25)',
+            transform: 'translateX(8px) translateY(-2px)',
+            bgcolor: 'action.hover',
+            '&::before': {
+              transform: 'scaleX(1)',
+            },
+            '& .mod-icon': {
+              transform: 'scale(1.1) rotate(5deg)',
+            },
+            '& .download-icon': {
+              transform: 'scale(1.2)',
+              color: '#00bcd4',
+            },
           },
         }}
       >
-        {/* Content */}
+        {/* Trending Badge */}
+        {isTrending && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 8,
+              left: 8,
+              zIndex: 10,
+            }}
+          >
+            <Chip
+              icon={<TrendingUp sx={{ fontSize: 14 }} />}
+              label="Trending"
+              size="small"
+              sx={{
+                height: 20,
+                fontSize: '0.7rem',
+                fontWeight: 'bold',
+                bgcolor: 'rgba(255, 87, 34, 0.9)',
+                color: '#fff',
+                '& .MuiChip-icon': {
+                  color: '#fff',
+                  fontSize: 14,
+                },
+              }}
+            />
+          </Box>
+        )}
+
+        {/* Left Section - Icon */}
         <Box
+          className="mod-icon"
           sx={{
-            p: 3,
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-            gap: 1.5,
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '110px',
+            height: '110px',
+            borderRadius: 2,
+            bgcolor: 'action.hover',
+            overflow: 'hidden',
+            position: 'relative',
+            transition: 'transform 0.4s ease',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            border: '2px solid',
+            borderColor: 'divider',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(135deg, rgba(0,188,212,0.1) 0%, rgba(63,81,181,0.1) 100%)',
+              opacity: 0,
+              transition: 'opacity 0.3s ease',
+            },
+            '&:hover::after': {
+              opacity: 1,
+            },
           }}
         >
-          {icon && (
+          {icon ? (
             <Image
               loader={() => icon}
               src={icon}
               alt={`${title} icon`}
-              width={80}
-              height={80}
-              style={{ borderRadius: "8px" }}
+              width={110}
+              height={110}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
+          ) : (
+            <Box 
+              sx={{ 
+                width: '100%', 
+                height: '100%', 
+                bgcolor: 'divider',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2rem',
+                color: 'text.disabled',
+              }}
+            >
+              📦
+            </Box>
           )}
+        </Box>
 
+        {/* Middle Section - Title, Author, Description */}
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+            minWidth: 0,
+            py: 0.5,
+          }}
+        >
+          {/* Title */}
           <Typography
             variant="h6"
             sx={{
-              fontWeight: "bold",
-              mt: 1,
-              wordBreak: "break-word",          // ✅ breaks long words
-              whiteSpace: "normal",             // ✅ allows multi-line
-              overflowWrap: "anywhere",         // ✅ ensures wrapping even for URLs or long tokens
+              fontWeight: 'bold',
+              fontSize: '1.1rem',
+              lineHeight: 1.3,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              color: 'text.primary',
+              transition: 'color 0.3s ease',
             }}
           >
             {title}
           </Typography>
 
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{
-              wordBreak: "break-word",
-              whiteSpace: "normal",
-            }}
-          >
-            By {author}
-          </Typography>
+          {/* Author */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Person sx={{ fontSize: '1rem', color: 'text.secondary' }} />
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{
+                fontSize: '0.85rem',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                fontWeight: 500,
+              }}
+            >
+              {author}
+            </Typography>
+            {isPopular && !isTrending && (
+              <Chip 
+                label="Popular" 
+                size="small"
+                sx={{
+                  height: 18,
+                  fontSize: '0.65rem',
+                  fontWeight: 'bold',
+                  bgcolor: 'rgba(63, 81, 181, 0.1)',
+                  color: '#3f51b5',
+                  ml: 0.5,
+                }}
+              />
+            )}
+          </Box>
 
+          {/* Description */}
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{
-              mt: 1,
-              flexGrow: 1,
-              wordBreak: "break-word",
-              whiteSpace: "normal",
-              overflowWrap: "anywhere",
-              textAlign: "center",
+              fontSize: '0.9rem',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: 1.5,
+              opacity: 0.8,
             }}
           >
             {description}
           </Typography>
         </Box>
 
-        {/* Footer */}
+        {/* Right Section - Downloads */}
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 0.5,
-            p: 1.5,
-            borderTop: "1px solid",
-            borderColor: "divider",
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 0.8,
+            px: 2.5,
+            py: 2,
+            borderLeft: '2px solid',
+            borderColor: 'divider',
+            minWidth: '120px',
+            textAlign: 'center',
+            position: 'relative',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              left: -2,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: '2px',
+              height: '0%',
+              background: 'linear-gradient(180deg, #00bcd4, #3f51b5)',
+              transition: 'height 0.4s ease',
+            },
+            '&:hover::before': {
+              height: '80%',
+            },
           }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            style={{ color: "inherit" }}
-            viewBox="0 0 16 16"
+          <DownloadIcon 
+            className="download-icon"
+            sx={{ 
+              fontSize: '2rem', 
+              color: 'primary.main',
+              transition: 'all 0.3s ease',
+            }} 
+          />
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              color: 'text.primary',
+              background: 'linear-gradient(135deg, #00bcd4, #3f51b5)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
           >
-            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-          </svg>
-          <Typography variant="caption" color="text.secondary">
             {downloads}
+          </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ 
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+            }}
+          >
+            Downloads
           </Typography>
         </Box>
       </Card>

@@ -6,39 +6,41 @@ export function ModCardSkeleton() {
   return (
     <Card
       sx={{
-        height: '100%',
-        minHeight: '420px',
-        width: '100%',
         display: 'flex',
-        flexDirection: 'column',
-        cursor: 'pointer',
-        overflow: 'hidden',
+        alignItems: 'center',
+        gap: 2.5,
+        p: 2,
         border: '1px solid',
         borderColor: 'divider',
+        borderRadius: 2,
+        cursor: 'pointer',
+        overflow: 'hidden',
+        height: '140px',
+        width: '100%',
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4, height: '100%', gap: 2 }}>
-        {/* Icon skeleton */}
-        <Skeleton variant="circular" width={96} height={96} />
+      {/* Left - Icon skeleton */}
+      <Box sx={{ flexShrink: 0 }}>
+        <Skeleton variant="rectangular" width={100} height={100} sx={{ borderRadius: 1.5 }} />
+      </Box>
 
+      {/* Middle - Content skeleton */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.8, minWidth: 0 }}>
         {/* Title skeleton */}
-        <Box sx={{ width: '100%', textAlign: 'center' }}>
-          <Skeleton variant="text" height={28} width="90%" sx={{ mx: 'auto', mb: 1 }} />
-          <Skeleton variant="text" height={16} width="70%" sx={{ mx: 'auto' }} />
-        </Box>
+        <Skeleton variant="text" height={20} width="70%" />
 
-        {/* Downloads skeleton */}
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-          <Skeleton variant="text" width={16} height={16} />
-          <Skeleton variant="text" width={80} height={16} />
-        </Box>
+        {/* Author skeleton */}
+        <Skeleton variant="text" height={14} width="40%" />
 
-        {/* Description skeleton - grows to fill space */}
-        <Box sx={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', gap: 1, minHeight: 0 }}>
-          <Skeleton variant="text" height={16} width="100%" />
-          <Skeleton variant="text" height={16} width="95%" />
-          <Skeleton variant="text" height={16} width="85%" />
-        </Box>
+        {/* Description skeleton */}
+        <Skeleton variant="text" height={16} width="100%" />
+      </Box>
+
+      {/* Right - Downloads skeleton */}
+      <Box sx={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5, px: 2, minWidth: '100px' }}>
+        <Skeleton variant="circular" width={24} height={24} />
+        <Skeleton variant="text" height={14} width="80%" />
+        <Skeleton variant="text" height={12} width="70%" />
       </Box>
     </Card>
   );
@@ -46,13 +48,13 @@ export function ModCardSkeleton() {
 
 export function ModCardGridSkeleton({ count = 9 }) {
   return (
-    <Grid container spacing={3}>
+    <Box sx={{ width: '100%', maxWidth: 1200, mx: 'auto' }}>
       {Array.from({ length: count }).map((_, i) => (
-        <Grid item xs={12} sm={6} md={4} key={i}>
+        <Box key={i} sx={{ mb: 2 }}>
           <ModCardSkeleton />
-        </Grid>
+        </Box>
       ))}
-    </Grid>
+    </Box>
   );
 }
 

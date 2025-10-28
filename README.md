@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🧩 ModMingle
 
-## Getting Started
+ModMingle is a clean and modern Next.js web app that allows users to explore, search, and download the most popular Minecraft mods from the Modrinth API.  
+It features smooth animations, elegant UI, and lightning-fast performance.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- ✨ **Fade-in Animations** — Smooth and lightweight transitions using GSAP and Framer Motion.  
+- 🎨 **Minimal & Pure Design** — Simple, responsive, and distraction-free interface built with Tailwind CSS.  
+- 📈 **Top Mods Display** — Shows trending and most downloaded mods dynamically from the Modrinth API.  
+- 🖱️ **Hover Effects** — Interactive hover transitions on mod cards for better UX.  
+- 🔍 **Mods Search** — Search through thousands of mods in real time.  
+- 📥 **Direct Download** — One-click access to mod downloads.  
+- 🔗 **Related Mods** — Discover similar or related mods easily.  
+- 🌗 **Theme Toggle** — Switch between light and dark modes (stored in localStorage).
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 14  
+- **Styling:** Tailwind CSS + Custom CSS  
+- **Animations:** GSAP + Framer Motion  
+- **API:** [Modrinth API](https://docs.modrinth.com/api-spec/)  
+- **UI Components:** MUI (Icons)  
+
+---
+
+## 📂 Project Structure
+
+.
+├── components/
+│ ├── Navbar.jsx
+│ ├── Hero.jsx
+│ ├── ModCard.jsx
+├── pages/
+│ ├── index.jsx
+│ ├── popular.jsx
+│ ├── about.jsx
+│ └── 404.jsx
+├── styles/
+│ ├── globals.css
+│ └── navbar.css
+├── public/
+│ └── favicon.ico
+└── README.md
+
+yaml
+Copy code
+
+---
+
+## ⚙️ Setup & Run Locally
 
 ```bash
+# Clone the repository
+git clone https://github.com/<your-username>/modmingle.git
+
+# Navigate to project folder
+cd modmingle
+
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open your browser at http://localhost:3000 🚀
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🧠 Future Improvements
+Add filtering by game version or category.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Add pagination or infinite scroll.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create user favorites and collections.
 
-## Learn More
+Add authentication (login with Modrinth or GitHub).
 
-To learn more about Next.js, take a look at the following resources:
+📜 License
+This project is licensed under the MIT License — feel free to modify and share!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Created with ❤️ by Mohamed Ayman

@@ -7,7 +7,6 @@ import {
   TextField,
   Box,
   Typography,
-  Grid,
   InputAdornment,
 } from '@mui/material';
 import { motion } from 'framer-motion';
@@ -22,6 +21,7 @@ export default function Mods() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+
   const modsPerPage = 27;
 
   // Fetch mods from Modrinth API
@@ -48,16 +48,12 @@ export default function Mods() {
     fetchMods();
   }, [currentPage, searchQuery]);
 
-  // Pagination handler
   const handlePageChange = (event, value) => setCurrentPage(value);
-
-  // Search handler
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
 
-  // Framer Motion animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -100,7 +96,6 @@ export default function Mods() {
               Search through thousands of mods and find exactly what you need
             </Typography>
 
-            {/* Search field */}
             <TextField
               label="Search Mods"
               variant="outlined"
@@ -119,7 +114,7 @@ export default function Mods() {
           </Box>
         </motion.div>
 
-        {/* Loading, Error, Empty, or Grid */}
+        {/* Main content */}
         {loading ? (
           <ModCardGridSkeleton count={27} />
         ) : error ? (
@@ -131,37 +126,36 @@ export default function Mods() {
             No mods found. Try adjusting your search query.
           </Typography>
         ) : (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible">
-            <Grid container spacing={2} alignItems="stretch">
-              {projects.map((project) =>
-                project.project_type !== 'mod' ? null : (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    key={project.project_id}
-                    sx={{ display: 'flex' }}
-                  >
-                    <motion.div variants={itemVariants} style={{ flexGrow: 1, width: '100%' }}>
-                      <ModCard
-                        title={project.title}
-                        description={
-                          project.description?.length > 150
-                            ? project.description.slice(0, 150) + '...'
-                            : project.description || 'No description available.'
-                        }
-                        author={project.author}
-                        downloads={project.downloads.toLocaleString()}
-                        icon={project.icon_url}
-                        slug={project.slug}
-                      />
-                    </motion.div>
-                  </Grid>
-                )
-              )}
-            </Grid>
-          </motion.div>
+          <Box
+            component={motion.div}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            sx={{ width: '100%', maxWidth: 1200, mx: 'auto' }}
+          >
+            {projects.map((project) =>
+              project.project_type !== 'mod' ? null : (
+                <motion.div
+                  key={project.project_id}
+                  variants={itemVariants}
+                  style={{ marginBottom: '16px' }}
+                >
+                  <ModCard
+                    title={project.title}
+                    description={
+                      project.description?.length > 150
+                        ? project.description.slice(0, 150) + '...'
+                        : project.description || 'No description available.'
+                    }
+                    author={project.author}
+                    downloads={project.downloads.toLocaleString()}
+                    icon={project.icon_url}
+                    slug={project.slug}
+                  />
+                </motion.div>
+              )
+            )}
+          </Box>
         )}
 
         {/* Pagination */}
