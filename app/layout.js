@@ -39,8 +39,11 @@ export const metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
+  }
+};
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
