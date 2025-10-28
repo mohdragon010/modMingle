@@ -7,7 +7,7 @@ It features smooth animations, elegant UI, and lightning-fast performance.
 
 ## 🚀 Features
 
-- ✨ **Fade-in Animations** — Smooth and lightweight transitions using GSAP and Framer Motion.  
+- ✨ **Fade-in Animations** — Smooth and lightweight transitions using Framer Motion.  
 - 🎨 **Minimal & Pure Design** — Simple, responsive, and distraction-free interface built with Tailwind CSS.  
 - 📈 **Top Mods Display** — Shows trending and most downloaded mods dynamically from the Modrinth API.  
 - 🖱️ **Hover Effects** — Interactive hover transitions on mod cards for better UX.  
@@ -20,9 +20,9 @@ It features smooth animations, elegant UI, and lightning-fast performance.
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Next.js 14  
-- **Styling:** Tailwind CSS + Custom CSS  
-- **Animations:** GSAP + Framer Motion  
+- **Framework:** Next.js
+- **Styling:** Tailwind CSS + MUI  
+- **Animations:**  Framer Motion  
 - **API:** [Modrinth API](https://docs.modrinth.com/api-spec/)  
 - **UI Components:** MUI (Icons)  
 
