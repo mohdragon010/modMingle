@@ -28,38 +28,15 @@ It features smooth animations, elegant UI, and lightning-fast performance.
 
 ---
 
-## 📂 Project Structure
-
-.
-├── components/
-│ ├── Navbar.jsx
-│ ├── Hero.jsx
-│ ├── ModCard.jsx
-├── pages/
-│ ├── index.jsx
-│ ├── popular.jsx
-│ ├── about.jsx
-│ └── 404.jsx
-├── styles/
-│ ├── globals.css
-│ └── navbar.css
-├── public/
-│ └── favicon.ico
-└── README.md
-
-yaml
-Copy code
-
----
 
 ## ⚙️ Setup & Run Locally
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/modmingle.git
+git clone https://github.com/mohdragon010/modMingle.git
 
 # Navigate to project folder
-cd modmingle
+cd modMingle
 
 # Install dependencies
 npm install
